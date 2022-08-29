@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+    <div class="test">
+        <div th:switch="${cars}">
+            <h2 th:case="null">No users yet!</h2>
+            <div th:case="*">
+
+                <div th:each="car : ${cars}">
+                    <p><span th:text="${car.getName()}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminlte/master/master.html}">
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+        <div layout:fragment="content" class="content-wrapper" >
+            <div style="margin: 0 20px">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Admin</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="../index.html">Dasdhboard</a></li>
+                        <li class="breadcrumb-item active">Update</li>
+                    </ol>
+                </div>
+                <div class="col-md-6">
+                <form  th:object="${UsersEntity}">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input style="margin:10px 0" th:name="name" id="name" class="form-control"  th:value="${user.getName()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input style="margin:10px 0" th:name="email" id="email" class="form-control"  th:value="${user.getEmail()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input style="margin:10px 0" th:name="password" class="form-control" id="password" placeholder="Enter password">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input style="margin:10px 0" th:name="address" class="form-control" id="address" th:value="${user.getAddress()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input style="margin:10px 0" th:name="telephone" class="form-control" id="telephone" th:value="${user.getTelephone()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Cmt</label>
+                            <input style="margin:10px 0" th:name="cmt" class="form-control" id="cmt" th:value="${user.getCmt()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Passport</label>
+                            <input style="margin:10px 0" th:name="passpost" class="form-control" id="passport" th:value="${user.getPassport()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <input style="margin:10px 0" type="number" th:name="status" class="form-control" id="status" th:value="${user.getStatus()}">
+                        </div>
+                        <div class="form-group">
+                            <label>Avatar</label>
+                            <input style="margin:10px 0" type="file" th:name="file" class="form-control" id="file" >
+                        </div>
+                    </div>
+                    <button type="button" href="javasript:" th:onclick="'update('+ ${user.getId()} +')'" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+            </div>
+        </div>
+</div>
+
+<div layout:fragment="script">
+    <script>
+        function update(sbId){
+
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var password = $('#password').val();
+            var address = $('#address').val();
+            var telephone = $('#telephone').val();
+            var cmt = $('#cmt').val();
+            var passport = $('#passport').val();
+            var status = $('#status').val();
+            var file = $('#file')[0].files[0];
+            const formData = new FormData();
+            formData.append("name",name);
+            formData.append("email",email);
+            formData.append("password",password);
+            formData.append("address",address);
+            formData.append("telephone",telephone);
+            formData.append("cmt",cmt);
+            formData.append("passport",passport);
+            formData.append("status",status);
+
+            formData.append("file",file);
+            alert(file)
+            $.ajax({
+                type:'POST',
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                url:"/user/update/" + sbId,
+                data:formData,
+                success:function(data){
+                    $("body").empty();
+                    $("body").html(data);
+
+                },
+                error:function(){
+                    alert("lỗi");
+                    console.log(err);
+                }
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminlte/master/master.html}">
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+        <div layout:fragment="content" class="content-wrapper" >
+            <div style="margin: 0 20px">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Car</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="../index.html">Dasdhboard</a></li>
+                        <li class="breadcrumb-item active">Update</li>
+                    </ol>
+                </div>
+                <div class="col-md-6">
+                <form  enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input style="margin:10px 0" th:name="name" class="form-control" id="name" th:value="${car.getName()}">
+                            </div>
+                            <div class="form-group">
+                                <label>car Number</label>
+                                <input style="margin:10px 0" th:name="carnumber" class="form-control" id="carnumber" th:value="${car.getCarnumber()}">
+                            </div>
+                            <div class="form-group">
+                                <label>price Per Day</label>
+                                <input style="margin:10px 0" type="number" th:name="priceperday" class="form-control" id="priceperday" th:value="${car.getPriceperday()}">
+                            </div>
+                            <div class="form-group">
+                                <label>description</label>
+                                <input style="margin:10px 0" type="text" th:name="description" class="form-control" id="description" th:value="${car.getDescription()}">
+                            </div>
+                            <div class="form-group">
+                                <label>company</label>
+                                <!--                                <input type="number" id="company_id" name="company_id">-->
+                                <select th:name="company_id" id="company_id">
+
+                                    <option th:each="company: ${companys}" th:value="${company.id}" th:text="${company.getName()}"
+                                    th:if="${car.getCompanyId()} == ${company.id}" selected></option>
+
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>seat Capacity</label>
+                                <input style="margin:10px 0" type="number" th:name="seatcapacity" class="form-control" id="seatcapacity" th:value="${car.getSeatcapacity()}">
+                            </div>
+                            <div class="form-group">
+                                <label>fule Type</label>
+                                <input style="margin:10px 0" th:name="fuletype" class="form-control" id="fuletype" th:value="${car.getFuletype()}">
+                            </div>
+                            <div class="form-group">
+                                <label>model year</label>
+                                <input style="margin:10px 0" type="number" th:name="modelyear" class="form-control" id="modelyear" th:value="${car.getModelyear()}">
+                            </div>
+                            <div class="form-group">
+                                <label>thumbnail</label>
+                                <input style="margin:10px 0" type="file" th:name="file" class="form-control" id="file">
+                            </div>
+                            <div class="form-group">
+                                <label>status</label>
+                                <input style="margin:10px 0" type="number" th:name="status" class="form-control" id="status" th:value="${car.getStatus()}">
+                            </div>
+                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label>Telephone</label>-->
+<!--                            <input style="margin:10px 0" th:name="telephone" class="form-control" id="telephone" th:value="${company.getTelephone()}">-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label>Status(1:Active; 2:No Active)</label>-->
+<!--                            <input style="margin:10px 0" th:name="status" class="form-control" id="status" th:value="${company.getStatus()} == 1 ? 'Active' : 'No Active'">-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label>Image</label>-->
+<!--                            <input style="margin:10px 0" th:name="image" class="form-control" id="image" th:value="${company.getImage()}">-->
+<!--                        </div>-->
+                    </div>
+                    <button type="button" href="javasript:" th:onclick="'update('+ ${car.getId()} +')'" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+            </div>
+        </div>
+</div>
+
+<div layout:fragment="script">
+    <script>
+        function update(sbId){
+
+            var name = $('#name').val();
+            var carnumber = $('#carnumber').val();
+            var priceperday = $('#priceperday').val();
+            var description = $('#description').val();
+            var company_id = $('#company_id').val();
+            var seatcapacity = $('#seatcapacity').val();
+            var fuletype = $('#fuletype').val();
+            var modelyear = $('#modelyear').val();
+            var file = $('#file')[0].files[0];
+            var status = $('#status').val();
+            alert(company_id)
+            const formData = new FormData();
+            formData.append("name",name);
+            formData.append("carnumber",carnumber);
+            formData.append("priceperday",priceperday);
+            formData.append("description",description);
+            formData.append("company_id",company_id);
+            formData.append("seatcapacity",seatcapacity);
+            formData.append("fuletype",fuletype);
+            formData.append("modelyear",modelyear);
+            formData.append("file",file);
+            formData.append("status",status);
+            $.ajax({
+                type:'POST',
+                url:"/admin/car/update/" + sbId,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                data:formData,
+                success:function(data){
+                    $("body").empty();
+                    $("body").html(data);
+
+                },
+                error:function(){
+                    alert("lỗi");
+                }
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>

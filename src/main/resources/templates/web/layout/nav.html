@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav layout:fragment="nav" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">Car<span>Book</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <div style="position:relative">
+                            <input class="form-control" id="search-product" placeholder="Search product here...">
+                            <h6 class="showhint" style="position: absolute; top:35px; border-radius:4px;z-index: 11;"></h6>
+                        </div>
+                    </div>
+                </div>
+                <li class="nav-item active"><a th:href="@{/}" class="nav-link">Home</a></li>
+                <li class="nav-item"><a th:href="@{/about}" class="nav-link">About</a></li>
+                <li class="nav-item"><a th:href="@{/services}" class="nav-link">Services</a></li>
+                <li class="nav-item">
+
+                        <a th:if="${#authentication.name} == 'anonymousUser'" th:href="@{/login}" class="nav-link">Login</a>
+
+
+                        <a th:unless="${#authentication.name} == 'anonymousUser'" th:href="@{/logout}" class="nav-link">Logout</a>
+
+                </li>
+                <li class="nav-item"><a th:href="@{/car}" class="nav-link">Cars</a></li>
+                <li class="nav-item"><a th:href="@{/personal}" class="nav-link">Personal</a></li>
+                <li class="nav-item"><a th:href="@{/contact}" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="text"></div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{web/layout/master.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Car Detail</title>
+</head>
+<body>
+    <div class="col-md-12" layout:fragment="content" style="margin-top: 100px">
+        <table id="myTable">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Invoice</th>
+                <th>Car</th>
+                <th>car Number</th>
+                <th>price Per Day</th>
+                <th>Seat capacity</th>
+                <th>fule Type</th>
+                <th>thumbnail</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tr >
+                <td th:text="${bookDetail.getId()}"></td>
+                <td th:text="${bookDetail.getInvoice()}"></td>
+                <td th:text="${bookDetail.getName()}"></td>
+                <td th:text="${bookDetail.getCarnumber()}"></td>
+                <td th:text="${bookDetail.getPriceperday()}"></td>
+                <td th:text="${bookDetail.getSeatcapacity()}"></td>
+                <td th:text="${bookDetail.getFuletype()}"></td>
+                <td><img style="width:100px;" th:src="${bookDetail.getThumbnail()}"/></td>
+                <td th:text="${bookDetail.getFromDate()}"></td>
+                <td th:text="${bookDetail.getToDate()}"></td>
+                <td th:switch="${bookDetail.getStatus()}">
+                    <span style="color:darkgreen;" th:case="1">Đang chờ xác thực</span>
+                    <span style="color:green;" th:case="2">Xác thực thành công</span>
+                    <span style="color:red;" th:case="3">Đã hủy</span>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

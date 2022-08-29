@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminlte/master/master.html}">
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+        <div layout:fragment="content" class="content-wrapper" >
+            <div style="margin:0 20px">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Car</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="../index.html">Dasdhboard</a></li>
+                        <li class="breadcrumb-item active">List</li>
+                    </ol>
+                </div>
+
+                <div class="col-md-6" style="margin:30px 0">
+                    <form  method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input style="margin:10px 0" th:name="name" class="form-control" id="name" placeholder="Nhập tên ">
+                            </div>
+                            <div class="form-group">
+                                <label>car Number</label>
+                                <input style="margin:10px 0" th:name="carnumber" class="form-control" id="carnumber" placeholder="Nhập carNumber ">
+                            </div>
+                            <div class="form-group">
+                                <label>price Per Day</label>
+                                <input style="margin:10px 0" type="number" th:name="priceperday" class="form-control" id="priceperday" placeholder="Nhập pricePerDay ">
+                            </div>
+                            <div class="form-group">
+                                <label>description</label>
+                                <input style="margin:10px 0" type="text" th:name="description" class="form-control" id="description" placeholder="Nhập description ">
+                            </div>
+                            <div class="form-group">
+                                <label>company</label>
+<!--                                <input type="number" id="company_id" name="company_id">-->
+                               <select th:name="company_id" id="company_id">
+
+                                   <option th:each="company: ${companys}" th:value="${company.id}" th:text="${company.getName()}"></option>
+
+                               </select>
+                            </div>
+                            <div class="form-group">
+                                <label>seat Capacity</label>
+                                <input style="margin:10px 0" type="number" th:name="seatcapacity" class="form-control" id="seatcapacity" placeholder="Nhập seatCapacity ">
+                            </div>
+                            <div class="form-group">
+                                <label>fule Type</label>
+                                <input style="margin:10px 0" th:name="fuletype" class="form-control" id="fuletype" placeholder="Nhập fuleType ">
+                            </div>
+                            <div class="form-group">
+                                <label>model year</label>
+                                <input style="margin:10px 0" type="number" th:name="modelyear" class="form-control" id="modelyear" placeholder="Nhập modelyear ">
+                            </div>
+                            <div class="form-group">
+                                <label>thumbnail</label>
+                                <input style="margin:10px 0" type="file" th:name="file" class="form-control" id="file">
+                            </div>
+                            <div class="form-group">
+                                <label>status</label>
+                                <input style="margin:10px 0" type="number" th:name="status" class="form-control" id="status" placeholder="Nhập status ">
+                            </div>
+                        </div>
+                        <button type="button" href="javasript:" th:onclick="save()" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+
+                <div th:switch="${cars}">
+                    <h2 th:case="null">No users yet!</h2>
+                    <div th:case="*">
+                        <table id="myTable">
+                             <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Name</th>
+                                    <th>car Number</th>
+                                    <th>price Per Day</th>
+                                    <th>company</th>
+                                    <th>seat Capacity</th>
+                                    <th>fule Type</th>
+                                    <th>thumbnail</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                                <tr th:each="car: ${cars}" th:id="*{car.getId()}">
+                                    <td th:text="${car.getId()}"></td>
+                                    <td th:text="${car.getName()}"></td>
+                                    <td th:text="${car.getCarnumber()}"></td>
+                                    <td th:text="${car.getPriceperday()}"></td>
+                                    <td th:text="${car.carCompany}"></td>
+                                    <td th:text="${car.getSeatcapacity()}"></td>
+                                    <td th:text="${car.getFuletype()}"></td>
+                                    <td><img style="width:100px;" th:src="${car.getThumbnail()}"/></td>
+                                    <td>
+                                        <a th:href="@{/admin/car/edit/{id}(id=${car.getId})}"
+                                           class="btn btn-success">Edit</a>
+                                        <button href="javasript:" th:onclick="'deleteUser('+ *{car.getId()} +')'"
+
+                                                class="btn btn-danger ">Delete</button>
+                                    </td>
+                                </tr>
+                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('#myTable').DataTable();
+        });
+    </script>
+    <script>
+        function deleteUser(userId){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type:'GET',
+                        url:"/admin/car/delete/" + userId,
+                        success:function(data){
+                            $("body").empty();
+                            $("body").html(data);
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                        },
+                        error:function(){
+                        }
+                    });
+
+                }
+            })
+        }
+        function save(){
+            var name = $('#name').val();
+            var carnumber = $('#carnumber').val();
+            var priceperday = $('#priceperday').val();
+            var description = $('#description').val();
+            var company_id = $('#company_id').val();
+            var seatcapacity = $('#seatcapacity').val();
+            var fuletype = $('#fuletype').val();
+            var modelyear = $('#modelyear').val();
+            var file = $('#file')[0].files[0];
+            var status = $('#status').val();
+            alert(company_id)
+            const formData = new FormData();
+            formData.append("name",name);
+            formData.append("carnumber",carnumber);
+            formData.append("priceperday",priceperday);
+            formData.append("description",description);
+            formData.append("company_id",company_id);
+            formData.append("seatcapacity",seatcapacity);
+            formData.append("fuletype",fuletype);
+            formData.append("modelyear",modelyear);
+            formData.append("file",file);
+            formData.append("status",status);
+            $.ajax({
+                type:'POST',
+                url:"/admin/car/save",
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                data:formData,
+                success:function(data){
+                    $("body").empty();
+                    $("body").html(data);
+
+                },
+                error:function(){
+                    alert("lỗi");
+                }
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>

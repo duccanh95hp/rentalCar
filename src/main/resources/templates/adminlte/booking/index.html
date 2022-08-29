@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminlte/master/master.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <div layout:fragment="content" class="content-wrapper" >
+        <div style="margin:0 20px">
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Booking</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a href="../index.html">Dasdhboard</a></li>
+                    <li class="breadcrumb-item active">List</li>
+                </ol>
+            </div>
+            <div th:switch="${bookings}">
+                <h2 th:case="null">No users yet!</h2>
+                <div th:case="*">
+                    <table id="myTable">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Customer</th>
+                                <th>Ngày tạo</th>
+                                <th>Telephone</th>
+                                <th>Invoice</th>
+                                <th>PriceDay</th>
+                                <th>FromDate</th>
+                                <th>ToDate</th>
+                                <th>Car</th>
+                                <th>CarNumber</th>
+                                <th>thumbnail</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="b: ${bookings}" th:id="*{b.getId()}">
+                                <td th:text="${b.getId()}"></td>
+                                <td th:text="${b.getNameU()}"></td>
+                                <td th:text="${b.getCreated()}"></td>
+                                <td th:text="${b.getTelephoneU()}"></td>
+                                <td th:text="${b.getInvoice()}"></td>
+                                <td th:text="${b.getPriceperday()}"></td>
+                                <td th:text="${b.getFromDate()}"></td>
+                                <td th:text="${b.getToDate()}"></td>
+                                <td th:text="${b.getName()}"></td>
+                                <td th:text="${b.getCarnumber()}"></td>
+                                <td><img style="width:100px;" th:src="${b.getThumbnail()}"/></td>
+                                <td th:switch="${b.getStatus()}">
+                                    <span style="color:darkgreen;" th:case="1">chờ xác thực</span>
+                                    <span style="color:green;" th:case="2">Thành công</span>
+                                    <span style="color:red;" th:case="3">Đã hủy</span>
+                                </td>
+                                <td th:if="${b.getStatus()} == 1">
+                                    <span th:onclick="'xacthuc('+ *{b.getId()} +')'">Xác thực</span>
+                                    <span th:onclick="'huy('+ *{b.getId()} +')'">Hủy</span>
+                                </td>
+                                <td th:unless="${b.getStatus()} == 1">
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('#myTable').DataTable();
+        });
+    </script>
+    <script>
+        function xacthuc(id){
+            var status = 2;
+
+            $.ajax({
+                type:'POST',
+                url:"/admin/booking/update/" + id,
+                data:{status:status},
+                success:function(data){
+                    alert("Đã được xác thực")
+                    $("body").empty();
+                    $("body").html(data);
+
+                },
+                error:function(){
+                    alert("lỗi");
+                }
+            });
+        }
+
+    </script>
+    <script>
+        function huy(id){
+            var status = 3;
+
+            $.ajax({
+                type:'POST',
+                url:"/admin/booking/update/" + id,
+                data:{status:status},
+                success:function(data){
+                    alert("Hủy thành công");
+                    $("body").empty();
+                    $("body").html(data);
+
+                },
+                error:function(){
+                    alert("lỗi");
+                }
+            });
+        }
+
+    </script>
+
+</div>
+</body>
+</html>

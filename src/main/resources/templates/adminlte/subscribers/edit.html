@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminlte/master/master.html}">
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+        <div layout:fragment="content" class="content-wrapper" >
+            <div style="margin: 0 20px">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Subscribers</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="../index.html">Dasdhboard</a></li>
+                        <li class="breadcrumb-item active">Update</li>
+                    </ol>
+                </div>
+                <div class="col-md-6">
+                <form  th:object="${SubscribersEntity}">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input style="margin:10px 0" th:name="subscribersemail" class="form-control" id="subscribersemail" th:value="${sb.getSubscribersemail()}">
+                        </div>
+                    </div>
+                    <button type="button" href="javasript:" th:onclick="'update('+ ${sb.getId()} +')'" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+            </div>
+        </div>
+</div>
+
+<div layout:fragment="script">
+    <script>
+        function update(sbId){
+            alert(sbId);
+            var subscribersemail = $('#subscribersemail').val();
+            // alert(subscribersemail)
+            $.ajax({
+                type:'POST',
+                url:"/admin/subscribers/update/" + sbId,
+                data:{subscribersemail:subscribersemail},
+                success:function(data){
+                    $("body").empty();
+                    $("body").html(data);
+
+                },
+                error:function(){
+                    alert("lỗi");
+                }
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>

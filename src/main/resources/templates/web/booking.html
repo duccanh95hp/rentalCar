@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{web/layout/master.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <section class="ftco-section ftco-no-pt bg-light">
+            <div class="container">
+                <div class="row no-gutters">
+                    <div class="col-md-12	featured-top">
+                        <div class="row no-gutters">
+                            <div class="col-md-4 d-flex align-items-center">
+                                <form th:action="@{/booking/save}" class="request-form ftco-animate bg-primary" method="post">
+                                    <h2>Make your trip</h2>
+<!--                                    <div class="form-group">-->
+<!--                                        <label for="" class="label">Pick-up location</label>-->
+<!--                                        <input type="text" class="form-control" placeholder="City, Airport, Station, etc">-->
+<!--                                    </div>-->
+<!--                                    <div class="form-group">-->
+<!--                                        <label for="" class="label">Drop-off location</label>-->
+<!--                                        <input type="text" class="form-control" placeholder="City, Airport, Station, etc">-->
+<!--                                    </div>-->
+                                    <div class="d-flex">
+                                        <div class="form-group mr-2">
+                                            <label for="" class="label">Pick-up date</label>
+                                            <input type="date" th:name="fromDate" class="form-control" id="fromDate" placeholder="Date">
+                                        </div>
+                                        <div class="form-group ml-2">
+                                            <label for="" class="label">Drop-off date</label>
+                                            <input type="date" th:name="toDate" class="form-control" id="toDate" placeholder="Date">
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="label">Note</label>
+                                        <input type="text" th:name="note" id="note" class="form-control"  placeholder="Note">
+                                    </div>
+                                    <input hidden th:name="user_id" id="user_id" th:value="${user.id}" type=note"number">
+                                    <input hidden th:name="car_id" id="car_id" th:value="${car.id}"></input>
+                                    <input hidden th:name="pricePerDay" id="pricePerDay" th:value="${car.getPriceperday()}"></input>
+                                    <input hidden th:name="status" id="status" th:value="1"></input>
+                                    <div class="form-group">
+                                        <button type="button" href="javasript:" th:onclick="save()" class="btn btn-primary">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-8 d-flex align-items-center">
+                                <div class="services-wrap rounded-right w-100">
+                                    <h3 class="heading-section mb-4">Infomation of Car</h3>
+                                    <div class="row d-flex mb-4">
+                                        <img style="height: 200px;object-fit: cover" th:src="${car.getThumbnail()}">
+                                        <div class="text">
+                                            <h2 class="mb-0"><a th:href="@{/carDetail/{id}(id=${car.getId()})}" th:text="${car.getName()}"></a></h2>
+                                            <div class="d-flex mb-3">
+
+                                                <p class="price ml-auto"><span th:text="${car.getPriceperday()}"> </span><span>$ /day</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        function save(){
+            var user_id = $('#user_id').val();
+            var car_id = $('#car_id').val();
+            var pricePerDay = $('#pricePerDay').val();
+            var status = $('#status').val();
+            var note = $('#note').val();
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            // var created_at = $('#created_at').val();
+
+            // const formData = new FormData();
+            // formData.append("user_id",user_id);
+            // formData.append("car_id",car_id);
+            // formData.append("pricePerDay",pricePerDay);
+            // formData.append("note",note);
+            // formData.append("fromDate",fromDate);
+            // formData.append("toDate",toDate);
+            // formData.append("status",status);
+            // formData.append("created_at",created_at);
+            $.ajax({
+                type:'POST',
+                url:"/booking/save",
+
+
+                data:{user_id:user_id,car_id:car_id,pricePerDay:pricePerDay,status:status,note:note,
+                    fromDate:fromDate,toDate:toDate,fromDate:fromDate},
+                success:function(e){
+                    alert("Booking successly")
+
+                },
+                error:function(){
+                    alert("lỗi");
+                }
+            });
+        }
+    </script>
+</div>
+
+</body>
+</html>
